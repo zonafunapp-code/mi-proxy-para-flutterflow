@@ -22,4 +22,10 @@ app.get('/', async (req, res) => {
     }
 });
 
+// Cambiamos el puerto para que funcione en Render
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Servidor proxy escuchando en el puerto ${port}`);
+});
+
 module.exports = app;
