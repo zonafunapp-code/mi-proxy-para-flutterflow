@@ -11,6 +11,11 @@ app.use(express.json());
 // Asegúrate de que esta URL sea la de tu Google Apps Script
 const api_url = 'https://script.google.com/macros/s/AKfycbwsbH9SpKMBdXMkMwgxMl-zwWa2NvrtJq50BKiJpiSJiLv8r4i6d9vxKV2JvdSK1MFt/exec';
 
+// Ruta por defecto para la URL principal.
+app.get('/', (req, res) => {
+    res.status(200).json({ message: "Proxy is working! Add a sheet name to the URL, e.g., /productos" });
+});
+
 // Este es el endpoint dinámico para todas las hojas
 app.get('/:sheet', async (req, res) => {
     try {
