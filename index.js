@@ -11,15 +11,24 @@ app.use(express.json());
 // Asegúrate de que esta URL sea la de tu Google Apps Script
 const api_url = 'https://script.google.com/macros/s/AKfycbwsbH9SpKMBdXMkMwgxMl-zwWa2NvrtJq50BKiJpiSJiLv8r4i6d9vxKV2JvdSK1MFt/exec';
 
-// Este es el único endpoint que usaremos para nuestra API
-app.get('/', async (req, res) => {
+// Este es el endpoint dinámico para todas las hojas
+app.get('/:sheet', async (req, res) => {
     try {
-        // Hacemos una petición POST y le enviamos la acción "read"
-        const response = await axios.post(api_url, { action: "read" });
+        // Lee el nombre de la hoja de la URL
+        const sheetName = req.params.sheet;
+        
+        // Crea el cuerpo de la petición con la acción y la hoja dinámicas
+        const payload = {
+            action: "read",
+            sheet: sheetName
+        };
+
+        // Hacemos una petición POST con el cuerpo de la petición
+        const response = await axios.post(api_url, payload);
         res.json(response.data);
     } catch (error) {
-        console.error('Error al obtener los productos:', error.message);
-        res.status(500).send('Error al obtener los productos de la API');
+        console.error('Error al obtener los datos:', error.message);
+        res.status(500).send('Error al obtener los datos de la API');
     }
 });
 
