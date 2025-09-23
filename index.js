@@ -1,47 +1,40 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
-const path = require('path');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// Asegúrate de que esta URL sea la de tu Google Apps Script
+// URL de tu Google Apps Script
 const api_url = 'https://script.google.com/macros/s/AKfycbwsbH9SpKMBdXMkMwgxMl-zwWa2NvrtJq50BKiJpiSJiLv8r4i6d9vxKV2JvdSK1MFt/exec';
 
-// Ruta por defecto para la URL principal.
+// Ruta de prueba
 app.get('/', (req, res) => {
-    res.status(200).json({ message: "Proxy is working! Add a sheet name to the URL, e.g., /productos" });
+  res.status(200).json({ message: "✅ Proxy funcionando. Usa POST /api con { action, sheet, data }" });
 });
 
-// Este es el endpoint dinámico para todas las hojas.
-// Recibe una petición GET de FlutterFlow.
-app.get('/:sheet', async (req, res) => {
-    try {
-        // Lee el nombre de la hoja de la URL
-        const sheetName = req.params.sheet;
-        
-        // Define el cuerpo de la petición que tu script de Google Apps Script necesita
-        const payload = {
-            action: "read",
-            sheet: sheetName
-        };
+// Nueva ruta que reenvía cualquier acción (CRUD)
+app.post('/api', async (req, res) => {
+  try {
+    const payload = req.body; // { action, sheet, data }
 
-        // Hacemos una petición POST a tu API de Google Apps Script
-        const response = await axios.post(api_url, payload);
-        res.json(response.data);
-    } catch (error) {
-        console.error('Error al obtener los datos:', error.message);
-        res.status(500).send('Error al obtener los datos de la API');
-    }
+    const response = await axios.post(api_url, payload, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error al procesar la solicitud:', error.message);
+    res.status(500).json({ status: "error", message: "Error al comunicar con Apps Script" });
+  }
 });
 
-// Cambiamos el puerto para que funcione en Render
+// Puerto para Render
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Servidor proxy escuchando en el puerto ${port}`);
+  console.log(`Servidor proxy escuchando en el puerto ${port}`);
 });
 
 module.exports = app;
