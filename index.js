@@ -29,6 +29,7 @@ app.get('/:sheet', async (req, res) => {
         };
 
         // Hacemos una petición POST con el cuerpo de la petición
+        // para que tu API de Google Apps Script la entienda.
         const response = await axios.post(api_url, payload);
         res.json(response.data);
     } catch (error) {
