@@ -22,15 +22,14 @@ app.get('/:sheet', async (req, res) => {
         // Lee el nombre de la hoja de la URL
         const sheetName = req.params.sheet;
         
-        // Crea el cuerpo de la petición con la acción y la hoja dinámicas
-        const payload = {
+        // Define los parámetros para la petición GET
+        const params = {
             action: "read",
             sheet: sheetName
         };
 
-        // Hacemos una petición POST con el cuerpo de la petición
-        // para que tu API de Google Apps Script la entienda.
-        const response = await axios.post(api_url, payload);
+        // Hacemos una petición GET a tu API de Google Apps Script
+        const response = await axios.get(api_url, { params: params });
         res.json(response.data);
     } catch (error) {
         console.error('Error al obtener los datos:', error.message);
