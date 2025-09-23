@@ -14,8 +14,8 @@ const api_url = 'https://script.google.com/macros/s/AKfycbwsbH9SpKMBdXMkMwgxMl-z
 // Este es el único endpoint que usaremos para nuestra API
 app.get('/', async (req, res) => {
     try {
-        // Hacemos una petición POST para que coincida con tu API
-        const response = await axios.post(api_url);
+        // Hacemos una petición POST y le enviamos un cuerpo de petición vacío
+        const response = await axios.post(api_url, {});
         res.json(response.data);
     } catch (error) {
         console.error('Error al obtener los productos:', error.message);
