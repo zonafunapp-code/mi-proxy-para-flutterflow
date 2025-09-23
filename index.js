@@ -16,20 +16,21 @@ app.get('/', (req, res) => {
     res.status(200).json({ message: "Proxy is working! Add a sheet name to the URL, e.g., /productos" });
 });
 
-// Este es el endpoint dinámico para todas las hojas
+// Este es el endpoint dinámico para todas las hojas.
+// Recibe una petición GET de FlutterFlow.
 app.get('/:sheet', async (req, res) => {
     try {
         // Lee el nombre de la hoja de la URL
         const sheetName = req.params.sheet;
         
-        // Define los parámetros para la petición GET
-        const params = {
+        // Define el cuerpo de la petición que tu script de Google Apps Script necesita
+        const payload = {
             action: "read",
             sheet: sheetName
         };
 
-        // Hacemos una petición GET a tu API de Google Apps Script
-        const response = await axios.get(api_url, { params: params });
+        // Hacemos una petición POST a tu API de Google Apps Script
+        const response = await axios.post(api_url, payload);
         res.json(response.data);
     } catch (error) {
         console.error('Error al obtener los datos:', error.message);
