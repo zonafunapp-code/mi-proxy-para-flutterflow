@@ -28,5 +28,22 @@ app.post('/api', async (req, res) => {
 
     // Llamada a Apps Script
     const response = await axios.post(api_url, payload, {
-      headers: { 'Content-Type':
+      headers: { 'Content-Type': 'application/json' }
+    });
 
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error al procesar la solicitud:', error.message);
+    res.status(500).json({ status: "error", message: "Error al comunicar con Apps Script" });
+  }
+});
+
+// =========================
+// Puerto para Render
+// =========================
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Servidor proxy escuchando en el puerto ${port}`);
+});
+
+module.exports = app;
